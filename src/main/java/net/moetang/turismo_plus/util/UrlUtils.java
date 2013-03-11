@@ -1,7 +1,6 @@
 package net.moetang.turismo_plus.util;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -134,6 +133,7 @@ public class UrlUtils {
 		}
 	}
 	public static final class VarEntry extends PathEntry{
+		private String[] splits;
 		public VarEntry(String pathName, PathEntryType pathEntryType) {
 			this.pathEntryType = pathEntryType;
 			this.pathName = pathName;
@@ -165,23 +165,36 @@ public class UrlUtils {
 			}
 		}
 		private String[] splitPatternUri(String uri){
-			String[] result = new String[3];
-			int firstpos = this.pathName.indexOf("#");
-			result[0] = this.pathName.substring(0, firstpos);
-			int secpos = this.pathName.indexOf("#", firstpos+1);
-			if(secpos == -1){
-				result[1] = this.pathName.substring(firstpos+1);
-				result[2] = "";
-			}else{
-				result[1] = this.pathName.substring(firstpos+1, secpos);
-				result[2] = this.pathName.substring(secpos+1);
+			if(this.splits == null){
+				String[] result = new String[3];
+				int firstpos = this.pathName.indexOf("#");
+				result[0] = this.pathName.substring(0, firstpos);
+				int secpos = this.pathName.indexOf("#", firstpos+1);
+				if(secpos == -1){
+					result[1] = this.pathName.substring(firstpos+1);
+					result[2] = "";
+				}else{
+					result[1] = this.pathName.substring(firstpos+1, secpos);
+					result[2] = this.pathName.substring(secpos+1);
+				}
+				this.splits = result;
 			}
-			return result;
+			return this.splits;
 		}
 		@Override
 		public EntryResolver getPathEntryResolver() {
-			// TODO Auto-generated method stub
-			return null;
+			return new EntryResolver() {
+				@Override
+				public void resolve(PathEntry entryToResolve, HttpServletRequest req) {
+					String[] patterns = splitPatternUri(pathName);
+					String path = entryToResolve.pathName;
+					String prestr = patterns[0];
+					String poststr = patterns[2];
+					String key = patterns[1];
+					String value = path.substring(prestr.length(), path.lastIndexOf(poststr));
+					Env.setParam(key, value);
+				}
+			};
 		}
 	}
 	public static final class WildCardEntry extends PathEntry{

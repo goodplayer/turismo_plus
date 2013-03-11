@@ -1,5 +1,8 @@
 package net.moetang.turismo_plus.util;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import net.moetang.turismo_plus.util.UrlUtils.RootEntry;
 
 import org.junit.Assert;
@@ -85,5 +88,22 @@ public class UrlUtilsTest extends UrlUtils {
 		
 		NormalEntry ne2 = new NormalEntry("/bbbb", null);
 		Assert.assertFalse(we.match(ne2));
+	}
+	
+	@Test
+	public void testDouhao(){
+        String[] routes = "dsf,sdfdsf.sdfsd,sdfsd".split(",");
+        Assert.assertEquals(3, routes.length);
+        Assert.assertEquals("dsf", routes[0]);
+        Assert.assertEquals("sdfdsf.sdfsd", routes[1]);
+        Assert.assertEquals("sdfsd", routes[2]);
+	}
+	
+	@Test
+	public void testWildcard(){
+		//*.jsp
+		Pattern p = Pattern.compile("\\S+\\.jsp$");
+		Matcher m = p.matcher("sdfkl_sdf-e%derjwof.jsp");
+		Assert.assertTrue(m.matches());
 	}
 }

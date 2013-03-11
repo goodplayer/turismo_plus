@@ -15,7 +15,11 @@
  */
 package net.moetang.turismo_plus.filter;
 
+import static com.ghosthack.turismo.util.ClassForName.createInstance;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -26,25 +30,48 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ghosthack.turismo.util.ClassForName.ClassForNameException;
+
+import net.moetang.turismo_plus.pipeline.action.ActionResult;
+import net.moetang.turismo_plus.pipeline.action.SuccessResult;
+import net.moetang.turismo_plus.router.Router;
+import net.moetang.turismo_plus.util.Env;
+
 public class StartPointFilter implements Filter {
+	private List<Router> routerList;
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain filterChain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		// TODO 影射多个router  404自定义   500自定义  以及其他自定义
+		try {
+			Env.createReq((HttpServletRequest)request, (HttpServletResponse)response, filterChain);
+			Env.doReq(routerList);
+			Env.doResult(Env.getResult());
+		} finally{
+			Env.endCurReq();
+		}
 	}
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		// TODO Auto-generated method stub
-		
+		//TODO
+		routerList = new ArrayList<>();
+        final String routesParam = filterConfig.getInitParameter(ROUTES);
+        String[] routes = routesParam.split(",");
+        try {
+        	for(String route : routes){
+        		routerList.add(createInstance(route, Router.class));
+        	}
+        } catch (ClassForNameException e) {
+            throw new ServletException(e);
+        }
 	}
+	
+    private static final String ROUTES = "routes";
 
 }
