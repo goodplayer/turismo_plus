@@ -13,10 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package net.moetang.turismo_plus.util;
+package net.moetang.turismo_plus.pipeline.actionresult;
 
-import net.moetang.turismo_plus.util.UrlUtils.PathEntry;
+import net.moetang.turismo_plus.pipeline.actionresult.type.NotSure;
+import net.moetang.turismo_plus.util.Env;
 
-public interface EntryResolver {
-	public void resolve(PathEntry entryToResolve);
+public class ContinueResult extends ActionResult implements NotSure {
+
+	@Override
+	public void doResult() {
+		Env.doChain();
+	}
+
 }

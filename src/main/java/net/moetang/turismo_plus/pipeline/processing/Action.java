@@ -4,6 +4,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.moetang.turismo_plus.pipeline.actionresult.DispatcherResult;
 import net.moetang.turismo_plus.util.Env;
 
 
@@ -13,6 +14,7 @@ public abstract class Action implements IAction {
 		this.filters = new Filter[0];
 	}
 	public Action(Filter...filters){
+		// TODO 
 		this.filters = filters;
 	}
 	public abstract void action();
@@ -24,8 +26,7 @@ public abstract class Action implements IAction {
 	}
 
     protected String params(String key) {
-    	//TODO
-        return Env.params(key);
+        return Env.getParam(key);
     }
 
     protected HttpServletRequest req() {
@@ -41,17 +42,14 @@ public abstract class Action implements IAction {
     }
 
     protected void alias(String target) {
-    	//TODO
         forward(target);
     }
 
     protected void forward(String target) {
-    	//TODO
-        new Alias().forward(target);
+    	Env.setResult(new DispatcherResult(target));
     }
     
     protected void jsp(String path) {
-    	//TODO
         forward(path);
     }
 

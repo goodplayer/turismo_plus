@@ -1,9 +1,6 @@
 package net.moetang.turismo_plus.goal;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import net.moetang.turismo_plus.pipeline.action.ContineResult;
+import net.moetang.turismo_plus.pipeline.actionresult.ContinueResult;
 import net.moetang.turismo_plus.pipeline.processing.Action;
 import net.moetang.turismo_plus.pipeline.processing.AfterAll;
 import net.moetang.turismo_plus.pipeline.processing.BeforeAll;
@@ -26,32 +23,29 @@ public class WebAppRouters extends SimpleRouter {
 		_exclude("\\S+\\.jsp$", new Action() {
 			@Override
 			public void action() {
-				Env.setResult(new ContineResult());
+				Env.setResult(new ContinueResult());
 			}
 		});
 		_prefix("/");
 		_default(new Action() {
 			@Override
 			public void action() {
-				// TODO Auto-generated method stub
 			}
 		});
 		
 		_before(new BeforeAll(){
 			@Override
-			public boolean doBefore(HttpServletRequest request,
-					HttpServletResponse response) {
+			public NEXT_OP_BEFORE doBefore() {
 				// TODO Auto-generated method stub
-				return false;
+				return null;
 			}
 		});
 
 		_after(new AfterAll() {
 			@Override
-			public boolean doAfter(HttpServletRequest request,
-					HttpServletResponse response) {
+			public NEXT_OP_AFTER doAfter() {
 				// TODO Auto-generated method stub
-				return false;
+				return null;
 			}
 		});
 
@@ -68,24 +62,17 @@ public class WebAppRouters extends SimpleRouter {
 				new Action(
 						new Filter() {
 							@Override
-							public void doFilter(HttpServletRequest request,
-									HttpServletResponse response,
-									FilterChain filterChain) {
-								// TODO Auto-generated method stub
+							public void doFilter(FilterChain filterChain) {
 								
 							}
 						}, new Filter() {
 							@Override
-							public void doFilter(HttpServletRequest request,
-									HttpServletResponse response,
-									FilterChain filterChain) {
-								// TODO Auto-generated method stub
+							public void doFilter(FilterChain filterChain) {
 								
 							}
 						}) {
 					@Override
 					public void action() {
-						// TODO Auto-generated method stub
 						
 					}
 				});

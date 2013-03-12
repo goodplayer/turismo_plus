@@ -1,9 +1,10 @@
 package net.moetang.turismo_plus.util;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import net.moetang.turismo_plus.util.UrlUtils.RootEntry;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -105,5 +106,55 @@ public class UrlUtilsTest extends UrlUtils {
 		Pattern p = Pattern.compile("\\S+\\.jsp$");
 		Matcher m = p.matcher("sdfkl_sdf-e%derjwof.jsp");
 		Assert.assertTrue(m.matches());
+	}
+	
+	@Test
+	public void testMapOrder(){
+		String key1 = "key1";
+		String key2 = "sldfjslf";
+		String key3 = "vnqwelkj";
+		String key4 = "key2";
+		
+		Map<String, String> hashMap = new HashMap<>();
+		Map<String, String> linkedHashMap = new LinkedHashMap<>();
+		
+		hashMap.put(key1, key1);
+		hashMap.put(key2, key2);
+		hashMap.put(key3, key3);
+		hashMap.put(key4, key4);
+
+		linkedHashMap.put(key1, key1);
+		linkedHashMap.put(key2, key2);
+		linkedHashMap.put(key3, key3);
+		linkedHashMap.put(key4, key4);
+		
+		System.out.println("==========================");
+		for(String key : hashMap.keySet()){
+			System.out.println(key);
+		}
+		System.out.println();
+		for(String key : linkedHashMap.keySet()){
+			System.out.println(key);
+		}
+		System.out.println("==========================");
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void testEnum(){
+		DD s = null;
+		switch (s) {
+		case ss:
+			System.out.println("--a");
+			break;
+		case dd:
+			System.out.println("--a");
+			break;
+		default:
+			System.out.println("--b");
+			break;
+		}
+	}
+	private enum DD{
+		ss, dd
 	}
 }
