@@ -1,10 +1,23 @@
+/*
+ * Copyright (c) 2013 goodplayer
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package net.moetang.turismo_plus.util;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
 
 public class UrlUtils {
 	public List<PathEntry> uriToPathEntry(String uri){
@@ -57,7 +70,9 @@ public class UrlUtils {
 		/**
 		 * the order of two mapper entry when test request uri<br />
 		 * 当测试请求uri时候的两个entry的顺序<br />
-		 * 
+		 * <br/>
+		 * Root -> Normal -> Var -> RegEx -> Wildcard<br/>
+		 * <br />
 		 * @see java.lang.Comparable#compareTo(java.lang.Object)
 		 */
 		@Override
@@ -80,9 +95,10 @@ public class UrlUtils {
 		
 		protected static EntryResolver emptyResolver = new EntryResolver() {
 			@Override
-			public void resolve(PathEntry entryToResolve, HttpServletRequest req) {
+			public void resolve(PathEntry entryToResolve) {
 			}
 		};
+		
 	}
 	public static final class RootEntry extends PathEntry{
 		public RootEntry() {
@@ -119,7 +135,7 @@ public class UrlUtils {
 		}
 		@Override
 		public int compareTo(PathEntry o) {
-			if(o == null){
+			if(o == null || o instanceof RootEntry){
 				return 1;
 			}else if((o instanceof NormalEntry)){
 				return 0;
@@ -156,7 +172,7 @@ public class UrlUtils {
 		}
 		@Override
 		public int compareTo(PathEntry o) {
-			if(o == null || o instanceof NormalEntry){
+			if(o == null || o instanceof NormalEntry || o instanceof RootEntry){
 				return 1;
 			}else if((o instanceof VarEntry)){
 				return 0;
@@ -185,14 +201,14 @@ public class UrlUtils {
 		public EntryResolver getPathEntryResolver() {
 			return new EntryResolver() {
 				@Override
-				public void resolve(PathEntry entryToResolve, HttpServletRequest req) {
+				public void resolve(PathEntry entryToResolve) {
 					String[] patterns = splitPatternUri(pathName);
 					String path = entryToResolve.pathName;
 					String prestr = patterns[0];
 					String poststr = patterns[2];
 					String key = patterns[1];
 					String value = path.substring(prestr.length(), path.lastIndexOf(poststr));
-					Env.setParam(key, value);
+					Env._setParam(key, value);
 				}
 			};
 		}
@@ -222,7 +238,7 @@ public class UrlUtils {
 		}
 		@Override
 		public int compareTo(PathEntry o) {
-			if(o == null || o instanceof NormalEntry || o instanceof VarEntry || o instanceof RegExEntry){
+			if(o == null || o instanceof RootEntry || o instanceof NormalEntry || o instanceof VarEntry || o instanceof RegExEntry){
 				return 1;
 			}else if((o instanceof WildCardEntry)){
 				return 0;
@@ -264,7 +280,7 @@ public class UrlUtils {
 		}
 		@Override
 		public int compareTo(PathEntry o) {
-			if(o == null || o instanceof NormalEntry || o instanceof VarEntry){
+			if(o == null || o instanceof RootEntry || o instanceof NormalEntry || o instanceof VarEntry){
 				return 1;
 			}else if((o instanceof RegExEntry)){
 				return 0;

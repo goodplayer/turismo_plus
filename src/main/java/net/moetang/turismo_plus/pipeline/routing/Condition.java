@@ -1,7 +1,8 @@
 package net.moetang.turismo_plus.pipeline.routing;
 
-import javax.servlet.http.HttpServletRequest;
+import net.moetang.turismo_plus.util.Env;
+
 
 public interface Condition {
-	public boolean test(HttpServletRequest request);
+	public boolean test(Env env);
 }

@@ -13,10 +13,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package net.moetang.turismo_plus.util;
+package net.moetang.turismo_plus.pipeline.actionresult;
 
-import net.moetang.turismo_plus.util.UrlUtils.PathEntry;
-
-public interface EntryResolver {
-	public void resolve(PathEntry entryToResolve);
+public abstract class ActionResult {
+	public abstract void doResult();
 }

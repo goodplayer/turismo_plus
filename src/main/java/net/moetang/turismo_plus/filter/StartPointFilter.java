@@ -30,12 +30,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ghosthack.turismo.util.ClassForName.ClassForNameException;
-
-import net.moetang.turismo_plus.pipeline.action.ActionResult;
-import net.moetang.turismo_plus.pipeline.action.SuccessResult;
 import net.moetang.turismo_plus.router.Router;
 import net.moetang.turismo_plus.util.Env;
+
+import com.ghosthack.turismo.util.ClassForName.ClassForNameException;
 
 public class StartPointFilter implements Filter {
 	private List<Router> routerList;
@@ -47,11 +45,11 @@ public class StartPointFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain filterChain) throws IOException, ServletException {
-		// TODO Auto-generated method stub
 		try {
 			Env.createReq((HttpServletRequest)request, (HttpServletResponse)response, filterChain);
+			Env env = Env.get();
 			Env.doReq(routerList);
-			Env.doResult(Env.getResult());
+			Env.doResult(env.getResult());
 		} finally{
 			Env.endCurReq();
 		}
@@ -59,7 +57,6 @@ public class StartPointFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		//TODO
 		routerList = new ArrayList<>();
         final String routesParam = filterConfig.getInitParameter(ROUTES);
         String[] routes = routesParam.split(",");
@@ -71,7 +68,7 @@ public class StartPointFilter implements Filter {
             throw new ServletException(e);
         }
 	}
-	
+
     private static final String ROUTES = "routes";
 
 }
