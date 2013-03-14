@@ -43,10 +43,11 @@ public abstract class AbstractRouter implements Router {
 
 	//===============================================
 	private String g_prefix;
+	private int prefixCutIdx;
 	//map all url with 'prefix' uri - means uri like : prefix/*
 	//no wildcard or regex support
 	//should start with '/'
-	//only once
+	//when use _custom to map uri will map prefix/#uri#
 	protected final void _prefix(final String prefix){
 		if(prefix.endsWith("/")){
 			this.g_prefix = prefix;
@@ -54,6 +55,7 @@ public abstract class AbstractRouter implements Router {
 		else{
 			this.g_prefix = prefix+"/";
 		}
+		prefixCutIdx = prefix.length()-1;
 	}
 	//===============================================
 	private Map<String, Pattern> excludedRegex = new LinkedHashMap<>();
@@ -283,8 +285,12 @@ public abstract class AbstractRouter implements Router {
 		public ActionResult resolve(String method, String uri) {
 			Env env = Env.get();
 			// 1st : check prefix
-			if((prefix != null) && (!uri.startsWith(prefix))){
-				return null;
+			if((prefix != null)){
+				if(!uri.startsWith(prefix))
+					return null;
+				else{
+					uri = uri.substring(prefixCutIdx);
+				}
 			}
 			// 2nd : check if excluded
 			for(String exclUri : excludedUris){
