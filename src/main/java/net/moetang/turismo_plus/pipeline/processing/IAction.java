@@ -15,6 +15,8 @@
  */
 package net.moetang.turismo_plus.pipeline.processing;
 
+import net.moetang.turismo_plus.util.Env;
+
 public interface IAction {
-	public void doAction();
+	public void doAction(Env env);
 }

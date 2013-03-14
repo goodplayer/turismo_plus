@@ -15,16 +15,14 @@
  */
 package net.moetang.turismo_plus.pipeline.processing;
 
+import net.moetang.turismo_plus.util.BeforeChain;
 import net.moetang.turismo_plus.util.Env;
 
 public interface BeforeAll {
-	public static enum NEXT_OP_BEFORE{
-		CONTINUE, STOP, STOP_BEFORES
-	}
 	/**
 	 * @param request
 	 * @param response
 	 * @return is ready to next 'before', note: not the action
 	 */
-	public NEXT_OP_BEFORE doBefore(Env env);
+	public void doBefore(Env env, BeforeChain beforeChain);
 }

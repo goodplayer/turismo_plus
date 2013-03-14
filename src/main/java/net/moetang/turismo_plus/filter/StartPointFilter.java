@@ -30,7 +30,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.moetang.turismo_plus.router.Router;
+import net.moetang.turismo_plus.pipeline.router.Router;
 import net.moetang.turismo_plus.util.Env;
 
 import com.ghosthack.turismo.util.ClassForName.ClassForNameException;

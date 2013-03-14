@@ -15,16 +15,14 @@
  */
 package net.moetang.turismo_plus.pipeline.processing;
 
+import net.moetang.turismo_plus.util.AfterChain;
 import net.moetang.turismo_plus.util.Env;
 
 public interface AfterAll {
-	public static enum NEXT_OP_AFTER{
-		CONTINUE, STOP
-	}
 	/**
 	 * @param request
 	 * @param response
 	 * @return is ready to next 'after', note: not the action
 	 */
-	public NEXT_OP_AFTER doAfter(Env env);
+	public void doAfter(Env env, AfterChain afterChain);
 }
