@@ -19,10 +19,5 @@ import net.moetang.turismo_plus.util.BeforeChain;
 import net.moetang.turismo_plus.util.Env;
 
 public interface BeforeAll {
-	/**
-	 * @param request
-	 * @param response
-	 * @return is ready to next 'before', note: not the action
-	 */
 	public void doBefore(Env env, BeforeChain beforeChain);
 }

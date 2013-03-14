@@ -63,8 +63,6 @@ public class UrlUtils {
 		 * 测试请求uri是否匹配<br />
 		 * 注意：请用规则entry匹配请求uri的entry<br/>
 		 * 
-		 * @param obj
-		 * @return
 		 */
 		public abstract boolean match(PathEntry requestUri);
 		/**
@@ -81,7 +79,6 @@ public class UrlUtils {
 		 * test if two mapper entry are equal, used in action mapper search tree construction<br />
 		 * 在生成匹配树的时候，比较两个entry是否相等
 		 * 
-		 * @see java.lang.Object#equals(java.lang.Object)
 		 */
 		@Override
 		public boolean equals(Object obj){

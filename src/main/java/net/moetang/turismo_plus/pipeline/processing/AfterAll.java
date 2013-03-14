@@ -19,10 +19,5 @@ import net.moetang.turismo_plus.util.AfterChain;
 import net.moetang.turismo_plus.util.Env;
 
 public interface AfterAll {
-	/**
-	 * @param request
-	 * @param response
-	 * @return is ready to next 'after', note: not the action
-	 */
 	public void doAfter(Env env, AfterChain afterChain);
 }
