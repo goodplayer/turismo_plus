@@ -15,33 +15,41 @@ import net.moetang.turismo_plus.util.FilterChain;
 
 
 public abstract class Action implements IAction {
-	protected FilterChain filterChain;
+	protected Filter[] filters;
 	public Action() {
-		this.createFilterChain(new Filter[0]);
+		this.filters = new Filter[0];
 	}
 	public Action(Filter...filters){
-		this.createFilterChain(filters);
+		this.filters = filters;
 	}
-	private void createFilterChain(Filter[] filters){
-		filterChain = new FilterChain() {
-			private Filter[] filters;
-			private int index = 0;
-			@Override
-			public void doNext(Env env) {
-				if(index < filters.length){
-					filters[index++].doFilter(env, this);
-				}else{
+	private FilterChain createFilterChain(final Filter[] filters){
+		if(filters.length == 0){
+			return new FilterChain() {
+				@Override
+				public void doNext(Env env) {
 					action(env);
 				}
-			}
-		};
+			};
+		}else{
+			return new FilterChain() {
+				private int index = 0;
+				@Override
+				public void doNext(Env env) {
+					if(index < filters.length){
+						filters[index++].doFilter(env, this);
+					}else{
+						action(env);
+					}
+				}
+			};
+		}
 	}
 
 	public abstract void action(Env env);
 
 	@Override
-	public void doAction() {
-		filterChain.doNext(Env.get());
+	public void doAction(Env env) {
+		this.createFilterChain(filters).doNext(env);
 	}
 
     protected String params(String key) {

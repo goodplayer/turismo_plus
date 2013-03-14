@@ -15,12 +15,12 @@ import net.moetang.turismo_plus.pipeline.actionresult.NotFoundResult;
 import net.moetang.turismo_plus.pipeline.actionresult.SuccessResult;
 import net.moetang.turismo_plus.pipeline.processing.Action;
 import net.moetang.turismo_plus.pipeline.processing.AfterAll;
-import net.moetang.turismo_plus.pipeline.processing.AfterAll.NEXT_OP_AFTER;
 import net.moetang.turismo_plus.pipeline.processing.BeforeAll;
-import net.moetang.turismo_plus.pipeline.processing.BeforeAll.NEXT_OP_BEFORE;
 import net.moetang.turismo_plus.pipeline.processing.IAction;
 import net.moetang.turismo_plus.pipeline.processing.Resolver;
 import net.moetang.turismo_plus.pipeline.routing.Condition;
+import net.moetang.turismo_plus.util.AfterChain;
+import net.moetang.turismo_plus.util.BeforeChain;
 import net.moetang.turismo_plus.util.Env;
 import net.moetang.turismo_plus.util.PathMapper;
 import net.moetang.turismo_plus.util.UrlUtils;
@@ -192,10 +192,87 @@ public abstract class AbstractRouter implements Router {
     protected static final String TRACE = "TRACE";
 
 	private void makeResolver() {
-		if(resolver == null)
+		if(resolver == null){
 			this.resolver = new ResolverImpl();
+		}
 	}
 
+	private DoChain createAfterChain(){
+		return new AfterChainImpl();
+	}
+	private interface DoChain{
+		public void doChain(Env env);
+	}
+	private class AfterChainImpl implements AfterChain, DoChain{
+		private List<AfterAll> list = afters;
+		private int i = 0;
+		private int length = list.size();
+		private boolean stopAfter = false;
+		@Override
+		public void stopAfters() {
+			this.stopAfter = true;
+		}
+		@Override
+		public void doNext() {
+		}
+		@Override
+		public void doChain(Env env) {
+			for(AfterAll a : list){
+				if(stopAfter || i < length)
+					return;
+				a.doAfter(env, this);
+			}
+		}
+	}
+	private DoChain createActionChain(final IAction action){
+		return new BeforeChainImpl(action);
+	}
+	private class BeforeChainImpl implements BeforeChain, DoChain{
+		private IAction action;
+		private List<BeforeAll> beforeList = befores;
+		private int i = 0;
+		private int length = befores.size();
+		private boolean stopAll = false;
+		private boolean stopAction = false;
+		private boolean stopBefores = false;
+
+		public BeforeChainImpl(IAction action) {
+			this.action = action;
+		}
+		@Override
+		public void doChain(Env env) {
+			for(BeforeAll b : beforeList){
+				if(stopAll)
+					return;
+				if(stopBefores || i < length)
+					break;
+				b.doBefore(env, this);
+			}
+			if(!stopAction){
+				this.action.doAction(env);
+			}
+			if(afters.size() != 0){
+				createAfterChain().doChain(env);
+			}
+		}
+		@Override
+		public void doNext() {
+		}
+		@Override
+		public void stopBefores() {
+			this.stopBefores = true;
+		}
+		@Override
+		public void stopAction() {
+			this.stopAction = true;
+			this.stopBefores = true;
+		}
+		@Override
+		public void stopAll() {
+			this.stopAll = true;
+		}
+		
+	}
 	private static final ActionResult SUCCESS_RESULT = new SuccessResult();
 	private class ResolverImpl implements Resolver{
 		private String prefix = g_prefix;
@@ -212,7 +289,7 @@ public abstract class AbstractRouter implements Router {
 			// 2nd : check if excluded
 			for(String exclUri : excludedUris){
 				if(excludedRegex.get(exclUri).matcher(uri).matches()){
-					excludedAction.get(exclUri).doAction();
+					excludedAction.get(exclUri).doAction(env);
 					return env.getResult();
 				}
 			}
@@ -232,43 +309,18 @@ public abstract class AbstractRouter implements Router {
 				if(defaultAction == null){
 					return NO_MAPPING;
 				}else{
-					defaultAction.doAction();
+					defaultAction.doAction(env);
 					return env.getResult();
 				}
 			}
 			else{
-				boolean stop = false;
-				for(BeforeAll b : befores){
-					NEXT_OP_BEFORE to = b.doBefore(env);
-					if(to == null)
-						to = NEXT_OP_BEFORE.CONTINUE;
-					switch (to) {
-					case STOP:
-						return null;
-					default:
-						break;
-					case STOP_BEFORES:
-						stop = true;
-						break;
+				if(befores.size() != 0){
+					createActionChain(action).doChain(env);
+				}else{
+					action.doAction(env);
+					if(afters.size() != 0){
+						createAfterChain().doChain(env);
 					}
-					if(stop)
-						break;
-				}
-				action.doAction();
-				stop = false;
-				for(AfterAll a : afters){
-					NEXT_OP_AFTER to = a.doAfter(env);
-					if(to == null)
-						to = NEXT_OP_AFTER.CONTINUE;
-					switch (to) {
-					case STOP:
-						stop = true;
-						break;
-					default:
-						break;
-					}
-					if(stop)
-						break;
 				}
 				// finally : success or found
 				return SUCCESS_RESULT;
