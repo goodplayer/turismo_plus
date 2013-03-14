@@ -21,8 +21,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ghosthack.turismo.action.ActionException;
-
 import net.moetang.turismo_plus.pipeline.actionresult.ActionResult;
 import net.moetang.turismo_plus.pipeline.actionresult.DispatcherResult;
 import net.moetang.turismo_plus.util.Env;
@@ -139,7 +137,7 @@ public abstract class Action implements IAction {
 		        try {
 		            Env._res().sendError(HttpServletResponse.SC_NOT_FOUND);
 		        } catch (IOException e) {
-		            throw new ActionException(e);
+		            throw new RuntimeException(e);
 		        }
 			}
         });
@@ -152,7 +150,7 @@ public abstract class Action implements IAction {
 		        try {
 		            Env._res().sendRedirect(String.valueOf(newLocation));
 		        } catch (IOException e) {
-		            throw new ActionException(e);
+		            throw new RuntimeException(e);
 		        }
 			}
         });
