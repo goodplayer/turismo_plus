@@ -21,8 +21,8 @@ import java.util.regex.Pattern;
 import net.moetang.turismo_plus.pipeline.routing.Condition;
 
 public final class CheckUtils {
-	public static Condition[] check(final Condition... filterList){
-		return filterList;
+	public static Condition[] check(final Condition... conditionList){
+		return conditionList;
 	}
 
 	public static Condition hRegEx(final String header, final String regex){
@@ -48,6 +48,18 @@ public final class CheckUtils {
 				if(value == null)
 					return false;
 				return value.contains(content);
+			}
+		};
+	}
+	
+	public static Condition hEqual(final String headerKey, final String headerValue){
+		return new Condition() {
+			@Override
+			public boolean test(Env env) {
+				String value = env.req().getHeader(headerKey);
+				if(value == null)
+					return false;
+				return value.equals(headerValue);
 			}
 		};
 	}
