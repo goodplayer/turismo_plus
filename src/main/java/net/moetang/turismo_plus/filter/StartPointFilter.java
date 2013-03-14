@@ -32,9 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.moetang.turismo_plus.pipeline.router.Router;
 import net.moetang.turismo_plus.util.Env;
-
-import com.ghosthack.turismo.util.ClassForName.ClassForNameException;
-
 public class StartPointFilter implements Filter {
 	private List<Router> routerList;
 
@@ -59,13 +56,17 @@ public class StartPointFilter implements Filter {
 	public void init(FilterConfig filterConfig) throws ServletException {
 		routerList = new ArrayList<>();
         final String routesParam = filterConfig.getInitParameter(ROUTES);
-        String[] routes = routesParam.split(",");
-        try {
-        	for(String route : routes){
-        		routerList.add(createInstance(route, Router.class));
+        if(routesParam != null){
+            String[] routes = routesParam.split(",");
+            for(String route : routes){
+        		try {
+					routerList.add(createInstance(route, Router.class));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
         	}
-        } catch (ClassForNameException e) {
-            throw new ServletException(e);
+        }else{
+        	//need to find another way to get routes
         }
 	}
 
