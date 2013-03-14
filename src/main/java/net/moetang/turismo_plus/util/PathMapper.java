@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.moetang.turismo_plus.pipeline.processing.Action;
 import net.moetang.turismo_plus.pipeline.processing.IAction;
 import net.moetang.turismo_plus.pipeline.routing.Condition;
 import net.moetang.turismo_plus.util.UrlUtils.PathEntry;
@@ -15,7 +14,7 @@ import net.moetang.turismo_plus.util.UrlUtils.PathEntry;
 public class PathMapper {
 	private Map<String, DepthMapper> depth = new HashMap<>();
 
-	public void add(final String method, final List<PathEntry> paths, final Condition[] conditions, final Action action) {
+	public void add(final String method, final List<PathEntry> paths, final Condition[] conditions, final IAction action) {
 		if(paths.size() == 0)
 			return;
 		DepthMapper dm = depth.get(method);
@@ -39,7 +38,7 @@ public class PathMapper {
 	private class DepthMapper {
 		// initial value : 9 depths = 1-9 avail  0 ommit
 		private SearchTable[] table = new SearchTable[10];
-		public void add(final List<PathEntry> paths, final Condition[] conditions, final Action action){
+		public void add(final List<PathEntry> paths, final Condition[] conditions, final IAction action){
 			int length = paths.size();
 			if(table.length <= length){
 				SearchTable[] tmp = new SearchTable[length+1];
@@ -64,7 +63,7 @@ public class PathMapper {
 	}
 	private class SearchTable {
 		private final TN head = new TN();
-		public void add(final List<PathEntry> paths, final Condition[] conditions, final Action action){
+		public void add(final List<PathEntry> paths, final Condition[] conditions, final IAction action){
 			Node n = new Node(paths, conditions, action);
 			Iterator<PathEntry> iter = n.getIterator();
 			TN parent = head;

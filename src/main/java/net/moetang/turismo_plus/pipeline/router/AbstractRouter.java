@@ -61,7 +61,7 @@ public abstract class AbstractRouter implements Router {
 	private Map<String, Pattern> excludedRegex = new LinkedHashMap<>();
 	private Map<String, IAction> excludedAction = new LinkedHashMap<>();
 	//use RegEx to match uri which will be excluded
-	protected final void _exclude(final String pathRegEx, final Action action) {
+	protected final void _exclude(final String pathRegEx, final IAction action) {
 		if(this.resolver == null){
 			Pattern p = Pattern.compile(pathRegEx);
 			this.excludedRegex.put(pathRegEx, p);
@@ -72,6 +72,8 @@ public abstract class AbstractRouter implements Router {
 	private Map<String, Map<String, String>> aliasMap = new HashMap<String, Map<String,String>>();
     // Route-alias shortcut methods
 	// no wildcard or regex support
+	// targetPath must with a specific prefix
+	//     - ex. prefix: /app/ , fromPath: /index , targetPath wants to be one with prefix '/other/' and path '/login' , then targetPath must be '/other/login'
 	protected final void _custom(final String method, final String fromPath, final String targetPath){
 		if (this.resolver == null) {
 			Map<String, String> methodMap = aliasMap.get(method);
@@ -98,7 +100,7 @@ public abstract class AbstractRouter implements Router {
 	//===============================================
 	private static final UrlUtils urlUtils = new UrlUtils();
 	private PathMapper pathMapper = new PathMapper();
-	protected final void _custom(final String method, final String path, final Condition[] conditions, final Action action) {
+	protected final void _custom(final String method, final String path, final Condition[] conditions, final IAction action) {
 		if (this.resolver == null) {
 			List<PathEntry> paths = urlUtils.uriToPathEntry(path);
 			pathMapper.add(method, paths, conditions, action);
@@ -107,7 +109,7 @@ public abstract class AbstractRouter implements Router {
 	//===============================================
 	private IAction defaultAction;
 	//only once
-	protected final void _default(final Action action){
+	protected final void _default(final IAction action){
 		if (this.resolver == null) {
 			this.defaultAction = action;
 		}
@@ -124,7 +126,7 @@ public abstract class AbstractRouter implements Router {
 	protected final void put(final String fromPath, final String targetPath) {
 		this._custom(PUT, fromPath, targetPath);
     }
-	private final Action continueAction = new Action() {
+	private final IAction continueAction = new Action() {
 		private ActionResult continueResult = new ContinueResult();
 		@Override
 		public void action(Env env) {
@@ -138,50 +140,50 @@ public abstract class AbstractRouter implements Router {
 	protected final void _exclude(final String pathRegEx) {
 		_exclude(pathRegEx, continueAction);
 	}
-	protected final void get(final String path, final Condition[] conditions, final Action action) {
+	protected final void get(final String path, final Condition[] conditions, final IAction action) {
 		_custom(GET, path, conditions, action);
     }
-	protected final void post(final String path, final Condition[] conditions, final Action action) {
+	protected final void post(final String path, final Condition[] conditions, final IAction action) {
 		_custom(POST, path, conditions, action);
     }
-	protected final void put(final String path, final Condition[] conditions, final Action action) {
+	protected final void put(final String path, final Condition[] conditions, final IAction action) {
 		_custom(PUT, path, conditions, action);
     }
-	protected final void head(final String path, final Condition[] conditions, final Action action) {
+	protected final void head(final String path, final Condition[] conditions, final IAction action) {
 		_custom(HEAD, path, conditions, action);
     }
-	protected final void options(final String path, final Condition[] conditions, final Action action) {
+	protected final void options(final String path, final Condition[] conditions, final IAction action) {
 		_custom(OPTIONS, path, conditions, action);
     }
-	protected final void delete(final String path, final Condition[] conditions, final Action action) {
+	protected final void delete(final String path, final Condition[] conditions, final IAction action) {
 		_custom(DELETE, path, conditions, action);
     }
-	protected final void trace(final String path, final Condition[] conditions, final Action action) {
+	protected final void trace(final String path, final Condition[] conditions, final IAction action) {
 		_custom(TRACE, path, conditions, action);
     }
     // Shortcuts methods
-	protected final void get(final String path, final Action action) {
+	protected final void get(final String path, final IAction action) {
 		get(path, new Condition[0], action);
     }
-	protected final void post(final String path, final Action action) {
+	protected final void post(final String path, final IAction action) {
 		post(path, new Condition[0], action);
     }
-	protected final void put(final String path, final Action action) {
+	protected final void put(final String path, final IAction action) {
 		put(path, new Condition[0], action);
     }
-	protected final void head(final String path, final Action action) {
+	protected final void head(final String path, final IAction action) {
 		head(path, new Condition[0], action);
     }
-	protected final void options(final String path, final Action action) {
+	protected final void options(final String path, final IAction action) {
 		options(path, new Condition[0], action);
     }
-	protected final void delete(final String path, final Action action) {
+	protected final void delete(final String path, final IAction action) {
 		delete(path, new Condition[0], action);
     }
-	protected final void trace(final String path, final Action action) {
+	protected final void trace(final String path, final IAction action) {
 		trace(path, new Condition[0], action);
     }
-	protected final void _custom(final String method, final String path, final Action action){
+	protected final void _custom(final String method, final String path, final IAction action){
 		_custom(method, path, new Condition[0], action);
 	}
 
