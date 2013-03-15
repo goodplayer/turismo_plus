@@ -63,4 +63,21 @@ public final class CheckUtils {
 			}
 		};
 	}
+	
+	public static Condition or(final Condition condition1, final Condition condition2){
+		return new Condition() {
+			@Override
+			public boolean test(Env env) {
+				return condition1.test(env)||condition2.test(env);
+			}
+		};
+	}
+	public static Condition and(final Condition condition1, final Condition condition2){
+		return new Condition() {
+			@Override
+			public boolean test(Env env) {
+				return condition1.test(env)&&condition2.test(env);
+			}
+		};
+	}
 }
