@@ -15,8 +15,6 @@
  */
 package net.moetang.turismo_plus.filter;
 
-import static com.ghosthack.turismo.util.ClassForName.createInstance;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +69,7 @@ public class StartPointFilter implements Filter {
         }
 	}
 
-    private static final String ROUTES = "routes";
+	private static final String ROUTES = "routes";
     
     protected void routers() {
 		
@@ -89,6 +87,15 @@ public class StartPointFilter implements Filter {
 		for(Router router : routers){
 			routerList.add(router);
 		}
+	}
+
+    private Router createInstance(String route, Class<Router> class1) {
+    	try {
+			return (Router) Class.forName(route).newInstance();
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }
