@@ -76,8 +76,14 @@ public class StartPointFilter implements Filter {
     protected void routers() {
 		
 	}
-    protected final void add(Router router) {
-    	routerList.add(router);
+    protected final void add(Class<? extends Router> routerClazz) {
+    	try {
+			routerList.add(routerClazz.newInstance());
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
