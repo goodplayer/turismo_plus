@@ -70,7 +70,7 @@ public abstract class AbstractRouter implements Router {
 		else{
 			this.g_prefix = prefix+"/";
 		}
-		prefixCutIdx = prefix.length()-1;
+		prefixCutIdx = g_prefix.length()-1;
 	}
 	//===============================================
 	private Map<String, Pattern> excludedRegex = new LinkedHashMap<>();
@@ -325,7 +325,7 @@ public abstract class AbstractRouter implements Router {
 				}
 			}
 			// 4th : find action
-			IAction action = pathMapper.getAction(method, urlUtils.uriToPathEntry(uri));
+			IAction action = pathMapper.getAction(method, urlUtils.uriToRequestOriginalPathEntry(uri));
 			// 5th : if it can't find any action, do default
 			//       if it can find one action, then do before->action->after
 			if(action == null){

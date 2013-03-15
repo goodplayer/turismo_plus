@@ -82,12 +82,12 @@ public class UrlUtilsTest extends UrlUtils {
 	
 	@Test
 	public void testWildcartEntryMatch(){
-		WildCardEntry we = new WildCardEntry("/*aaaa*bbbb", null);
+		WildCardEntry we = new WildCardEntry("/*aaaa*bbbb");
 		
-		NormalEntry ne = new NormalEntry("/aabbaaaaddbbbb", null);
+		NormalEntry ne = new NormalEntry("/aabbaaaaddbbbb");
 		Assert.assertTrue(we.match(ne));
 		
-		NormalEntry ne2 = new NormalEntry("/bbbb", null);
+		NormalEntry ne2 = new NormalEntry("/bbbb");
 		Assert.assertFalse(we.match(ne2));
 	}
 	
