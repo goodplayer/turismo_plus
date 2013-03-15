@@ -40,13 +40,13 @@ public class FastWebAppRouters extends FastMapRouter {
 				new Action(
 						new Filter() {
 							@Override
-							public void doFilter(Env env, FilterChain filterChain) {
+							public void doit(Env env, FilterChain filterChain) {
 								filterChain.doNext(env);
 							}
 						},
 						new Filter() {
 							@Override
-							public void doFilter(Env env, FilterChain filterChain) {
+							public void doit(Env env, FilterChain filterChain) {
 								filterChain.doNext(env);
 							}
 						}) {

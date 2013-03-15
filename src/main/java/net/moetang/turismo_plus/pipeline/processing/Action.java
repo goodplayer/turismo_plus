@@ -49,7 +49,7 @@ public abstract class Action implements IAction {
 				@Override
 				public void doNext(Env env) {
 					if(index < filters.length){
-						filters[index++].doFilter(env, this);
+						filters[index++].doit(env, this);
 					}else{
 						action(env);
 					}

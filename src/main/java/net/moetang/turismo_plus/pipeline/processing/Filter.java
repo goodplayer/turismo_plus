@@ -19,5 +19,5 @@ import net.moetang.turismo_plus.util.Env;
 import net.moetang.turismo_plus.util.FilterChain;
 
 public interface Filter {
-	public void doFilter(Env env, FilterChain filterChain);
+	public void doit(Env env, FilterChain filterChain);
 }

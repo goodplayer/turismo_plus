@@ -40,6 +40,24 @@ public class UrlUtils {
 		}
 		return entrylist;
 	}
+	public List<PathEntry> uriToRequestOriginalPathEntry(String uri){
+		List<PathEntry> entrylist = new ArrayList<>();
+		try {
+			//sdflj/sdfs     is two
+			//     /sdfsf    is two
+			//     /sdfdsf/  is two
+			String[] paths = uri.split("/");
+			if(paths.length == 0){
+				entrylist.add(new RootEntry());
+			}else{
+				for(int i = 1; i < paths.length; i++){
+					entrylist.add(new NormalEntry(paths[i]));
+				}
+			}
+		} catch (Exception e) {
+		}
+		return entrylist;
+	}
 	
 	protected static enum PathEntryType{
 		NORMAL, VAR, WILDCARD, REGEX, REGEX_VAR, ROOT, REQUEST_ENTRY
@@ -97,7 +115,7 @@ public class UrlUtils {
 		};
 		
 	}
-	public static final class RootEntry extends PathEntry{
+	protected static final class RootEntry extends PathEntry{
 		public RootEntry() {
 			this.pathEntryType = PathEntryType.ROOT;
 			this.pathName = "/";
@@ -121,9 +139,9 @@ public class UrlUtils {
 			return emptyResolver;
 		}
 	}
-	public static final class NormalEntry extends PathEntry{
-		public NormalEntry(String pathName, PathEntryType pathEntryType) {
-			this.pathEntryType = pathEntryType;
+	protected static final class NormalEntry extends PathEntry{
+		public NormalEntry(String pathName) {
+			this.pathEntryType = PathEntryType.NORMAL;
 			this.pathName = pathName;
 		}
 		@Override
@@ -145,15 +163,16 @@ public class UrlUtils {
 			return emptyResolver;
 		}
 	}
-	public static final class VarEntry extends PathEntry{
+	protected static final class VarEntry extends PathEntry{
 		private String[] splits;
-		public VarEntry(String pathName, PathEntryType pathEntryType) {
-			this.pathEntryType = pathEntryType;
+		private String[] patterns;
+		public VarEntry(String pathName) {
+			this.pathEntryType = PathEntryType.VAR;
 			this.pathName = pathName;
+			this.patterns = this.splitPatternUri(pathName);
 		}
 		@Override
 		public boolean match(PathEntry requestUri) {
-			String[] patterns = this.splitPatternUri(pathName);
 			String prestr = patterns[0];
 			if(prestr.length() != 0 && (!requestUri.pathName.startsWith(prestr))){
 				return false;
@@ -210,16 +229,17 @@ public class UrlUtils {
 			};
 		}
 	}
-	public static final class WildCardEntry extends PathEntry{
-		public WildCardEntry(String pathName, PathEntryType pathEntryType) {
-			this.pathEntryType = pathEntryType;
+	protected static final class WildCardEntry extends PathEntry{
+		private String[] parts;
+		public WildCardEntry(String pathName) {
+			this.pathEntryType = PathEntryType.WILDCARD;
 			this.pathName = pathName;
+			this.parts = this.pathName.split("\\*");
 		}
 		@Override
 		public boolean match(PathEntry requestUri) {
 			if(requestUri == null)
 				return false;
-			String[] parts = this.pathName.split("\\*");
 			String uri = requestUri.pathName;
 			int i ;
 			for(String part : parts){
@@ -248,15 +268,16 @@ public class UrlUtils {
 			return emptyResolver;
 		}
 	}
-	public static final class RegExEntry extends PathEntry{
+	protected static final class RegExEntry extends PathEntry{
 		private Pattern p;
-		public RegExEntry(String pathName, PathEntryType pathEntryType) {
-			this.pathEntryType = pathEntryType;
+		private String[] patterns;
+		public RegExEntry(String pathName) {
+			this.pathEntryType = PathEntryType.REGEX;
 			this.pathName = pathName;
+			this.patterns = this.splitPatternUri(pathName);
 		}
 		@Override
 		public boolean match(PathEntry requestUri) {
-			String[] patterns = this.splitPatternUri(pathName);
 			String prestr = patterns[0];
 			if(prestr.length() != 0 && (!requestUri.pathName.startsWith(prestr))){
 				return false;
@@ -313,17 +334,17 @@ public class UrlUtils {
 				int firstPos = pathName.indexOf("#");
 				if(firstPos != pathName.length()-1){
 					if(pathName.charAt(firstPos+1)!='#')
-						return new VarEntry(pathName, PathEntryType.VAR);
+						return new VarEntry(pathName);
 					else{
 						if(firstPos+1 != pathName.length()-1){
-							return new RegExEntry(pathName, PathEntryType.REGEX);
+							return new RegExEntry(pathName);
 						}
 					}
 				}
 			}
 		}else if(pathName.contains("*")){//with *
-			return new WildCardEntry(pathName, PathEntryType.WILDCARD);
+			return new WildCardEntry(pathName);
 		}
-		return new NormalEntry(pathName, PathEntryType.NORMAL);
+		return new NormalEntry(pathName);
 	}
 }
