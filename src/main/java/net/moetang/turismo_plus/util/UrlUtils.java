@@ -173,15 +173,16 @@ public class UrlUtils {
 		}
 		@Override
 		public boolean match(PathEntry requestUri) {
+			String pn = requestUri.pathName;
 			String prestr = patterns[0];
-			if(prestr.length() != 0 && (!requestUri.pathName.startsWith(prestr))){
+			if(prestr.length() != 0 && (!pn.startsWith(prestr))){
 				return false;
 			}
 			String poststr = patterns[2];
-			if(poststr.length() != 0 && (!requestUri.pathName.endsWith(poststr))){
+			if(poststr.length() != 0 && (!pn.endsWith(poststr))){
 				return false;
 			}
-			if(prestr.length() == requestUri.pathName.indexOf(poststr)){
+			if(prestr.length() == pn.lastIndexOf(poststr)){
 				return false;
 			}
 			return true;
@@ -278,19 +279,20 @@ public class UrlUtils {
 		}
 		@Override
 		public boolean match(PathEntry requestUri) {
+			String pn = requestUri.pathName;
 			String prestr = patterns[0];
-			if(prestr.length() != 0 && (!requestUri.pathName.startsWith(prestr))){
+			if(prestr.length() != 0 && (!pn.startsWith(prestr))){
 				return false;
 			}
 			String poststr = patterns[2];
-			if(poststr.length() != 0 && (!requestUri.pathName.endsWith(poststr))){
+			if(poststr.length() != 0 && (!pn.endsWith(poststr))){
 				return false;
 			}
 			String toTestStr = null;
 			if(poststr.length() == 0){
-				toTestStr = requestUri.pathName.substring(prestr.length());
+				toTestStr = pn.substring(prestr.length());
 			}else{
-				toTestStr = requestUri.pathName.substring(prestr.length(), requestUri.pathName.lastIndexOf(poststr));
+				toTestStr = pn.substring(prestr.length(), pn.lastIndexOf(poststr));
 			}
 			if(toTestStr.length()==0){
 				return false;
