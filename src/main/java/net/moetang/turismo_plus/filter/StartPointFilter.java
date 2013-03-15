@@ -85,5 +85,10 @@ public class StartPointFilter implements Filter {
 			e.printStackTrace();
 		}
 	}
+    protected final void add(Router... routers) {
+		for(Router router : routers){
+			routerList.add(router);
+		}
+	}
 
 }
