@@ -286,7 +286,12 @@ public class UrlUtils {
 			if(poststr.length() != 0 && (!requestUri.pathName.endsWith(poststr))){
 				return false;
 			}
-			String toTestStr = requestUri.pathName.substring(prestr.length(), requestUri.pathName.indexOf(poststr));
+			String toTestStr = null;
+			if(poststr.length() == 0){
+				toTestStr = requestUri.pathName.substring(prestr.length());
+			}else{
+				toTestStr = requestUri.pathName.substring(prestr.length(), requestUri.pathName.lastIndexOf(poststr));
+			}
 			if(toTestStr.length()==0){
 				return false;
 			}
