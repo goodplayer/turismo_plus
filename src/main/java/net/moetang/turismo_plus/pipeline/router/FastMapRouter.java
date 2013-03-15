@@ -50,7 +50,7 @@ public abstract class FastMapRouter implements Router {
 		else{
 			this.g_prefix = prefix+"/";
 		}
-		prefixIdx = prefix.length()-1;
+		prefixIdx = g_prefix.length()-1;
 	}
 	//===============================================
 	private Map<String, Pattern> excludedRegex = new LinkedHashMap<>();

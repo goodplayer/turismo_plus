@@ -70,7 +70,7 @@ public abstract class AbstractRouter implements Router {
 		else{
 			this.g_prefix = prefix+"/";
 		}
-		prefixCutIdx = prefix.length()-1;
+		prefixCutIdx = g_prefix.length()-1;
 	}
 	//===============================================
 	private Map<String, Pattern> excludedRegex = new LinkedHashMap<>();

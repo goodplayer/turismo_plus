@@ -44,7 +44,7 @@ public abstract class UriRouter implements Router {
 		else{
 			this.g_prefix = prefix+"/";
 		}
-		prefixIdx = prefix.length()-1;
+		prefixIdx = g_prefix.length()-1;
 	}
 	//===============================================
 	private Map<String, Map<String, IAction>> map = new HashMap<>();
