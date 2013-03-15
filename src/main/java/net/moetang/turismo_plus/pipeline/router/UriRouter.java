@@ -17,10 +17,10 @@ package net.moetang.turismo_plus.pipeline.router;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import net.moetang.turismo_plus.pipeline.actionresult.ActionResult;
 import net.moetang.turismo_plus.pipeline.actionresult.NotFoundResult;
 import net.moetang.turismo_plus.pipeline.actionresult.SuccessResult;
-import net.moetang.turismo_plus.pipeline.processing.Action;
 import net.moetang.turismo_plus.pipeline.processing.IAction;
 import net.moetang.turismo_plus.pipeline.processing.Resolver;
 import net.moetang.turismo_plus.util.Env;
@@ -61,7 +61,7 @@ public abstract class UriRouter implements Router {
 	//===============================================
 	private IAction defaultAction;
 	//only once
-	protected final void _default(final Action action){
+	protected final void _default(final IAction action){
 		if (this.resolver == null) {
 			this.defaultAction = action;
 		}
