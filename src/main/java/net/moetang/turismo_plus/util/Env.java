@@ -50,7 +50,9 @@ public class Env {
 
 	public static void doReq(List<Router> routerList) {
 		HttpServletRequest r = Env._req();
-		String uri = r.getRequestURI();
+		//Attention: only for filter / servlet may not get correct uri
+		//check http://blog.moetang.net/archives/471
+		String uri = r.getServletPath();
 		String method = r.getMethod();
 		get().curRouters = routerList;
 		doReq(routerList, method, uri);
