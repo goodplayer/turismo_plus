@@ -36,11 +36,11 @@ public class StartPointFilter implements Filter {
 	private List<Router> routerList;
 
 	@Override
-	public void destroy() {
+	public final void destroy() {
 	}
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response,
+	public final void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain filterChain) throws IOException, ServletException {
 		try {
 			Env.createReq((HttpServletRequest)request, (HttpServletResponse)response, filterChain);
@@ -53,7 +53,7 @@ public class StartPointFilter implements Filter {
 	}
 
 	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
+	public final void init(FilterConfig filterConfig) throws ServletException {
 		routerList = new ArrayList<>();
         final String routesParam = filterConfig.getInitParameter(ROUTES);
         if(routesParam != null){
@@ -66,10 +66,18 @@ public class StartPointFilter implements Filter {
 				}
         	}
         }else{
-        	//need to find another way to get routes
+        	// way 1st : subclass loads all routers
+        	routers();
         }
 	}
 
     private static final String ROUTES = "routes";
+    
+    protected void routers() {
+		
+	}
+    protected final void add(Router router) {
+    	routerList.add(router);
+	}
 
 }

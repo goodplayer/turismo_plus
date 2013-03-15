@@ -5,7 +5,7 @@
 
   <groupId>net.moetang</groupId>
   <artifactId>turismo_plus</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.1-d</version>
   <packaging>jar</packaging>
 
   <name>turismo_plus</name>
@@ -14,6 +14,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <jetty.version>9.0.0.v20130308</jetty.version>
   </properties>
 
