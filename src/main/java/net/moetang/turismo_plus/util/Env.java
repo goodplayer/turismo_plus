@@ -36,6 +36,7 @@ public class Env {
 			HttpServletResponse response, FilterChain filterChain) {
     	this.request = request;
     	this.response = response;
+    	this.filterChain = filterChain;
 	}
 
 	public static void createReq(HttpServletRequest request,
