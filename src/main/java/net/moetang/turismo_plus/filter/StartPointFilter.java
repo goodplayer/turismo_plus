@@ -29,12 +29,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.moetang.turismo_plus.pipeline.router.Router;
+import net.moetang.turismo_plus.util.AutoLoaded;
 import net.moetang.turismo_plus.util.Env;
 public class StartPointFilter implements Filter {
 	private List<Router> routerList;
+	private List<AutoLoaded> loadedModule;
 
 	@Override
 	public final void destroy() {
+		if(loadedModule != null){
+			for(AutoLoaded al : loadedModule){
+				al.unload();
+			}
+		}
 	}
 
 	@Override
@@ -53,6 +60,7 @@ public class StartPointFilter implements Filter {
 	@Override
 	public final void init(FilterConfig filterConfig) throws ServletException {
 		routerList = new ArrayList<>();
+		loadedModule = new ArrayList<>();
         final String routesParam = filterConfig.getInitParameter(ROUTES);
         if(routesParam != null){
             String[] routes = routesParam.split(",");
@@ -67,6 +75,7 @@ public class StartPointFilter implements Filter {
         	// way 1st : subclass loads all routers
         	routers();
         }
+        autoLoad();
 	}
 
 	private static final String ROUTES = "routes";
@@ -86,6 +95,20 @@ public class StartPointFilter implements Filter {
     protected final void add(Router... routers) {
 		for(Router router : routers){
 			routerList.add(router);
+		}
+	}
+    
+    protected void autoLoad() {
+		
+	}
+    protected final void addAutoLoad(AutoLoaded... autoLoad) {
+		for(AutoLoaded a : autoLoad){
+			try {
+				a.load();
+				loadedModule.add(a);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
