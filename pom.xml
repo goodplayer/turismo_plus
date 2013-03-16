@@ -2,6 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+  
 
   <groupId>net.moetang</groupId>
   <artifactId>turismo_plus</artifactId>
@@ -9,7 +15,7 @@
   <packaging>jar</packaging>
 
   <name>turismo_plus</name>
-  <description>a fork to turismo web framework</description>
+  <description>-- it was once designed - just modify / add my own code to turismo. :) Now it is totally a new software.</description>
   <url>https://github.com/goodplayer/turismo_plus</url>
 
   <properties>
