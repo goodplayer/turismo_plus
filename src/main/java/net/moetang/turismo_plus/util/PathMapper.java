@@ -88,7 +88,18 @@ public class PathMapper {
 				t.pe = pe;
 				parent = this.addToArray(parent, t);
 			}
-			parent.node = n;
+			this.addNode(parent, n);
+		}
+		private void addNode(TN parent, Node node){
+			if(parent.nodes == null){
+				parent.nodes = new Node[1];
+				parent.nodes[0] = node;
+			}else{
+				Node[] tmp = new Node[parent.nodes.length+1];
+				System.arraycopy(parent.nodes, 0, tmp, 0, parent.nodes.length);
+				parent.nodes = tmp;
+				parent.nodes[parent.nodes.length-1] = node;
+			}
 		}
 		public IAction getAction(final List<PathEntry> paths){
 			// when matches (path) -> (conditions), (resolve req uri) -> (return action)
@@ -109,8 +120,13 @@ public class PathMapper {
 					return null;
 				}
 			}
-			Node node = parent.node;
-			return node.getAction(paths);
+			Env env = Env.get();
+			for(Node node : parent.nodes){
+				IAction action = node.getAction(paths, env);
+				if(action != null)
+					return action;
+			}
+			return null;
 		}
 		//return curNode
 		private TN addToArray(TN parentNode, TN curNode){
@@ -148,7 +164,7 @@ public class PathMapper {
 		private class TN implements Comparable<TN>{
 			public PathEntry pe;
 			public TN[] next;
-			public Node node;
+			public Node[] nodes;
 			@Override
 			public int compareTo(TN o) {
 				return this.pe.compareTo(o.pe);
@@ -170,8 +186,7 @@ public class PathMapper {
 				resolvers.add(pe.getPathEntryResolver());
 			}
 		}
-		public IAction getAction(final List<PathEntry> paths){
-			Env env = Env.get();
+		public IAction getAction(final List<PathEntry> paths, final Env env){
 			for(Condition c : conditions){
 				if(!c.test(env)){
 					return null;
