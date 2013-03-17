@@ -59,6 +59,7 @@ public class StartPointFilter implements Filter {
 
 	@Override
 	public final void init(FilterConfig filterConfig) throws ServletException {
+        autoLoad();
 		routerList = new ArrayList<>();
 		loadedModule = new ArrayList<>();
         final String routesParam = filterConfig.getInitParameter(ROUTES);
@@ -75,7 +76,6 @@ public class StartPointFilter implements Filter {
         	// way 1st : subclass loads all routers
         	routers();
         }
-        autoLoad();
 	}
 
 	private static final String ROUTES = "routes";
