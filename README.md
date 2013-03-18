@@ -5,3 +5,5 @@ turismo_plus
 [![Build Status](https://travis-ci.org/goodplayer/turismo_plus.png?branch=master)](https://travis-ci.org/goodplayer/turismo_plus)
 
 Home Page of [turismo](https://github.com/ghosthack/turismo)
+
+Contact me : [http://blog.moetang.net](http://blog.moetang.net)
