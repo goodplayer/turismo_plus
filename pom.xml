@@ -10,7 +10,7 @@
 
   <groupId>net.moetang</groupId>
   <artifactId>turismo_plus</artifactId>
-  <version>0.0.2-r-SNAPSHOT</version>
+  <version>0.0.2-r</version>
   <packaging>jar</packaging>
 
   <name>turismo_plus</name>
@@ -35,7 +35,7 @@
     <connection>scm:git:git@github.com:goodplayer/turismo_plus.git</connection>
     <developerConnection>scm:git:git@github.com:goodplayer/turismo_plus.git</developerConnection>
     <url>https://github.com/goodplayer/turismo_plus</url>
-    <tag>turismo_plus-0.0.2-r-2</tag>
+    <tag>turismo_plus-0.0.2-r-3</tag>
   </scm>
 
   <build>
