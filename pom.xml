@@ -10,7 +10,7 @@
 
   <groupId>net.moetang</groupId>
   <artifactId>turismo_plus</artifactId>
-  <version>0.0.2-d</version>
+  <version>0.0.2-r</version>
   <packaging>jar</packaging>
 
   <name>turismo_plus</name>
