@@ -6,3 +6,5 @@ target/
 .classpath
 settings.xml
 bin/
+pom.xml.releaseBackup
+release.properties
