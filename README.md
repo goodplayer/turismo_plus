@@ -14,6 +14,6 @@ How to use, add below to your pom.xml:
 <dependency>
     <groupId>net.moetang</groupId>
     <artifactId>turismo_plus</artifactId>
-    <version>0.0.3-r</version>
+    <version>0.0.4-r</version>
 </dependency>
 ```
