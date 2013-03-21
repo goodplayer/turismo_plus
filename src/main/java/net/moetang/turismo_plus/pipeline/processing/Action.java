@@ -82,7 +82,7 @@ public abstract class Action implements IAction {
 			return null;
 		}
     }
-	protected void attr(String key, Object value){
+	protected void setAttr(String key, Object value){
 		req().setAttribute(key, value);
 	}
 

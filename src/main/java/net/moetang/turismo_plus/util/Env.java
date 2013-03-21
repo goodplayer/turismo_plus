@@ -174,6 +174,21 @@ public class Env {
 	public Object getAttri(String key){
 		return request.getAttribute(key);
 	}
+	public <T> T getAttr(String key, Class<T> clazz){
+		Object o = request.getAttribute(key);
+		if(o == null){
+			return null;
+		}
+		try {
+			return clazz.cast(o);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public void attr(String key, Object o){
+		request.setAttribute(key, o);
+	}
 
 	public static HttpServletRequest _req() {
 		return get().request;
