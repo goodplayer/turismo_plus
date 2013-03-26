@@ -35,7 +35,6 @@
     <connection>scm:git:git@github.com:goodplayer/turismo_plus.git</connection>
     <developerConnection>scm:git:git@github.com:goodplayer/turismo_plus.git</developerConnection>
     <url>https://github.com/goodplayer/turismo_plus</url>
-    <tag>turismo_plus-0.0.2-r-3</tag>
   </scm>
 
   <build>
@@ -112,6 +111,11 @@
       <artifactId>tomcat-jasper</artifactId>
       <version>7.0.37</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+    	<groupId>net.moetang</groupId>
+    	<artifactId>nekocore</artifactId>
+    	<version>0.0.10-r</version>
     </dependency>
   </dependencies>
 

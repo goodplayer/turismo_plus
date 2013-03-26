@@ -26,11 +26,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.moetang.nekocore.ioc.Context;
 import net.moetang.turismo_plus.pipeline.actionresult.ActionResult;
 import net.moetang.turismo_plus.pipeline.router.Router;
 
 public class Env {
     private static ThreadLocal<Env> locals = new ThreadLocal<Env>();
+    private static Context iocContainer;
+    
+    public static Context getIocContainer(){
+    	return iocContainer;
+    }
+    public static void setIocContainer(Context container){
+    	iocContainer = container;
+    }
 
     private Env(HttpServletRequest request,
 			HttpServletResponse response, FilterChain filterChain) {
