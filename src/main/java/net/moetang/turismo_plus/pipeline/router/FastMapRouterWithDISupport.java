@@ -31,14 +31,24 @@ import net.moetang.turismo_plus.pipeline.processing.IAction;
 import net.moetang.turismo_plus.pipeline.processing.Resolver;
 import net.moetang.turismo_plus.util.Env;
 
-public abstract class FastMapRouter implements Router {
+/**
+ * NOTE: all the methods contains IAction parameter will be ommitted when resolved<br />
+ * So the parameter can be set to null
+ *
+ */
+public abstract class FastMapRouterWithDISupport implements Router {
 	
-	public FastMapRouter() {
+	public FastMapRouterWithDISupport() {
 		map();
 		this.resolver = new ResolverImpl();
 	}
 	
 	protected abstract void map();
+
+	private final IAction getAction(String actionName){
+		IAction action = Env.getIocContainer().get(actionName, IAction.class);
+		return action;
+	}
 
 	//===============================================
 	private String g_prefix;
@@ -56,8 +66,11 @@ public abstract class FastMapRouter implements Router {
 	private Map<String, Pattern> excludedRegex = new LinkedHashMap<>();
 	private Map<String, IAction> excludedAction = new LinkedHashMap<>();
 	//use RegEx to match uri which will be excluded
-	protected final void _exclude(final String pathRegEx, final IAction action) {
+	protected final void _exclude(final String pathRegEx, final String actionName) {
 		if(this.resolver == null){
+			IAction action = this.getAction(actionName);
+			if(action == null)
+				return ;
 			Pattern p = Pattern.compile(pathRegEx);
 			this.excludedRegex.put(pathRegEx, p);
 			this.excludedAction.put(pathRegEx, action);
@@ -81,8 +94,11 @@ public abstract class FastMapRouter implements Router {
 	}
 	//===============================================
 	private Map<String, Map<String, IAction>> map = new HashMap<>();
-	protected final void _custom(final String method, final String path, final IAction action) {
+	protected final void _custom(final String method, final String path, IAction action, final String actionName) {
 		if (this.resolver == null) {
+			action = this.getAction(actionName);
+			if(action == null)
+				return ;
 			Map<String, IAction> methodMap = map.get(method);
 			if(methodMap == null){
 				methodMap = new HashMap<>();
@@ -94,8 +110,11 @@ public abstract class FastMapRouter implements Router {
 	//===============================================
 	private IAction defaultAction;
 	//only once
-	protected final void _default(final Action action){
+	protected final void _default(final String actionName){
 		if (this.resolver == null) {
+			IAction action = this.getAction(actionName);
+			if(action == null)
+				return ;
 			this.defaultAction = action;
 		}
 	}
@@ -122,28 +141,30 @@ public abstract class FastMapRouter implements Router {
 	 * @param pathRegEx
 	 */
 	protected final void _exclude(final String pathRegEx) {
-		_exclude(pathRegEx, continueAction);
+		Pattern p = Pattern.compile(pathRegEx);
+		this.excludedRegex.put(pathRegEx, p);
+		this.excludedAction.put(pathRegEx, continueAction);
 	}
-	protected final void get(final String path, final IAction action) {
-		_custom(GET, path, action);
+	protected final void get(final String path, final IAction action, final String actionName) {
+		_custom(GET, path, action, actionName);
     }
-	protected final void post(final String path, final IAction action) {
-		_custom(POST, path, action);
+	protected final void post(final String path, final IAction action, final String actionName) {
+		_custom(POST, path, action, actionName);
     }
-	protected final void put(final String path, final IAction action) {
-		_custom(PUT, path, action);
+	protected final void put(final String path, final IAction action, final String actionName) {
+		_custom(PUT, path, action, actionName);
     }
-	protected final void head(final String path, final IAction action) {
-		_custom(HEAD, path, action);
+	protected final void head(final String path, final IAction action, final String actionName) {
+		_custom(HEAD, path, action, actionName);
     }
-	protected final void options(final String path, final IAction action) {
-		_custom(OPTIONS, path, action);
+	protected final void options(final String path, final IAction action, final String actionName) {
+		_custom(OPTIONS, path, action, actionName);
     }
-	protected final void delete(final String path, final IAction action) {
-		_custom(DELETE, path, action);
+	protected final void delete(final String path, final IAction action, final String actionName) {
+		_custom(DELETE, path, action, actionName);
     }
-	protected final void trace(final String path, final IAction action) {
-		_custom(TRACE, path, action);
+	protected final void trace(final String path, final IAction action, final String actionName) {
+		_custom(TRACE, path, action, actionName);
     }
 
 	private Resolver resolver;

@@ -17,7 +17,7 @@ Contact me : [http://blog.moetang.net](http://blog.moetang.net)
 > 2. 后端并行处理
 > 3. BigPipe模型
 
-功能越来越多,结构越来越复杂,慢慢的脱离了sinatra/turismo的风格,从0.0.5-r版到turismo_plus代号的最后一版0.0.9-r,api将不断变化和优化
+功能越来越多，结构越来越复杂，慢慢的脱离了sinatra/turismo的风格，从0.0.5-r版到turismo_plus代号的最后一版0.0.9-r，api将不断变化和优化
 
 How to use, add below to your pom.xml:
 
