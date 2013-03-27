@@ -113,6 +113,14 @@ public abstract class Action implements IAction {
     protected void result(ActionResult actionResult){
     	Env._setResult(actionResult);
     }
+    
+    protected void flushPageletHead(PageletHead head) {
+		head.doFlushHead(Env.get());
+	}
+    
+    protected void flushPagelet(Pagelet pagelet) {
+		pagelet.flushPagelet(Env.get());
+	}
 
     protected void movedPermanently(final String newLocation) {
         Env._setResult(new ActionResult() {
