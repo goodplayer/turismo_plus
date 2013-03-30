@@ -65,64 +65,64 @@ public abstract class Action implements IAction {
 		this.createFilterChain(filters).doNext(env);
 	}
 
-    protected String params(String key) {
+    protected final String params(String key) {
         return Env._getParam(key);
     }
-    protected String[] paramSets(String key) {
+    protected final String[] paramSets(String key) {
 		return Env._getParamArray(key);
 	}
     
-    protected Object attr(String key) {
+    protected final Object attr(String key) {
 		return Env._getAttri(key);
 	}
-	protected <T> T attr(String key, Class<T> clazz){
+	protected final <T> T attr(String key, Class<T> clazz){
     	try {
 			return clazz.cast(attr(key));
 		} catch (ClassCastException e) {
 			return null;
 		}
     }
-	protected void setAttr(String key, Object value){
+	protected final void setAttr(String key, Object value){
 		req().setAttribute(key, value);
 	}
 
-    protected HttpServletRequest req() {
+    protected final HttpServletRequest req() {
         return Env._req();
     }
 
-    protected HttpServletResponse res() {
+    protected final HttpServletResponse res() {
         return Env._res();
     }
 
-    protected ServletContext ctx() {
+    protected final ServletContext ctx() {
         return Env._ctx();
     }
 
-    protected void alias(String target) {
+    protected final void alias(String target) {
         forward(target);
     }
 
-    protected void forward(String target) {
+    protected final void forward(String target) {
     	Env._setResult(new DispatcherResult(target));
     }
 
-    protected void jsp(String path) {
+    protected final void jsp(String path) {
         forward(path);
     }
 
-    protected void result(ActionResult actionResult){
+    protected final void result(ActionResult actionResult){
     	Env._setResult(actionResult);
     }
     
-    protected void flushPageletHead(PageletHead head) {
+    protected final void flushPageletHead(PageletHead head) {
 		head.doFlushHead(Env.get());
 	}
     
-    protected void flushPagelet(Pagelet pagelet) {
+    protected final void flushPagelet(Pagelet pagelet) {
 		pagelet.flushPagelet(Env.get());
 	}
 
-    protected void movedPermanently(final String newLocation) {
+    protected final void movedPermanently(final String newLocation) {
         Env._setResult(new ActionResult() {
 			@Override
 			public void doResult() {
@@ -132,7 +132,7 @@ public abstract class Action implements IAction {
         });
     }
 
-    protected void movedTemporarily(final String newLocation) {
+    protected final void movedTemporarily(final String newLocation) {
     	Env._setResult(new ActionResult() {
 			@Override
 			public void doResult() {
@@ -142,7 +142,7 @@ public abstract class Action implements IAction {
         });
     }
 
-    protected void notFound() {
+    protected final void notFound() {
     	Env._setResult(new ActionResult() {
 			@Override
 			public void doResult() {
@@ -155,7 +155,7 @@ public abstract class Action implements IAction {
         });
     }
 
-    protected void redirect(final String newLocation) {
+    protected final void redirect(final String newLocation) {
     	Env._setResult(new ActionResult() {
 			@Override
 			public void doResult() {
@@ -168,7 +168,7 @@ public abstract class Action implements IAction {
         });
     }
 
-    protected void print(String string) {
+    protected final void print(String string) {
         try {
 			Env._res().getWriter().write(string);
 		} catch (IOException e) {

@@ -8,10 +8,18 @@ import javax.servlet.AsyncListener;
 
 import net.moetang.turismo_plus.util.Env;
 
-public abstract class AsyncAction implements IAction, AsyncListener, Runnable {
+public abstract class AsyncAction extends Action implements IAction, AsyncListener, Runnable {
 	
 	private AsyncContext asyncContext;
 	private volatile boolean isComplete = false;
+	
+	public AsyncAction() {
+		super();
+	}
+	
+	public AsyncAction(Filter...filters){
+		super(filters);
+	}
 
 	@Override
 	public final void doAction(Env env) {
@@ -21,11 +29,9 @@ public abstract class AsyncAction implements IAction, AsyncListener, Runnable {
 		asyncContext.start(this);
 	}
 	
-	protected abstract void doAsync(Env env);
-	
 	@Override
 	public final void run() {
-		doAsync(Env.get());
+		super.doAction(Env.get());
 		this.complete();
 	}
 	
