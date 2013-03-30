@@ -13,8 +13,8 @@ Contact me : [http://blog.moetang.net](http://blog.moetang.net)
 
 最新版0.0.5-r版,大幅修改内核结构,以适应新功能:
 
-> 1. Servlet3.0异步
-> 2. 后端并行处理 Phaser/ForkJoinPool/CyclicBarrier
+> 1. Servlet3.0异步 - Plan1: AsyncAction
+> 2. 后端并行处理 Phaser/ForkJoinPool/CyclicBarrier - 
 > 3. BigPipe模型 - Plan1: PageletHead/Pagelet/flushPageletHead/flushPagelet
 
 功能越来越多，结构越来越复杂，慢慢的脱离了sinatra/turismo的风格，从0.0.5-r版到turismo_plus代号的最后一版0.0.9-r，api将不断变化和优化

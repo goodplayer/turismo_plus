@@ -15,6 +15,8 @@
  */
 package net.moetang.turismo_plus.pipeline.actionresult;
 
+import java.util.Map;
+
 import net.moetang.turismo_plus.util.Env;
 
 public abstract class TemplateResult extends ActionResult {
@@ -29,6 +31,8 @@ public abstract class TemplateResult extends ActionResult {
 	}
 	
 	protected abstract void initEngine();
+	public abstract void initParam(String param);
+	public abstract void initParam(Map<String, String> params);
 	
 	protected abstract void render(Env env);
 

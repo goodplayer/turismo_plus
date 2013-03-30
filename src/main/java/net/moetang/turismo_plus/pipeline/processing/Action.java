@@ -16,6 +16,7 @@
 package net.moetang.turismo_plus.pipeline.processing;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.moetang.turismo_plus.pipeline.actionresult.ActionResult;
 import net.moetang.turismo_plus.pipeline.actionresult.DispatcherResult;
+import net.moetang.turismo_plus.pipeline.actionresult.TemplateResult;
 import net.moetang.turismo_plus.util.Env;
 import net.moetang.turismo_plus.util.FilterChain;
 
@@ -120,6 +122,15 @@ public abstract class Action implements IAction {
     
     protected final void flushPagelet(Pagelet pagelet) {
 		pagelet.flushPagelet(Env.get());
+	}
+
+    protected final void render(TemplateResult actionResult, String param) {
+    	actionResult.initParam(param);
+		Env._setResult(actionResult);
+	}
+    protected final void render(TemplateResult actionResult, Map<String, String> params) {
+    	actionResult.initParam(params);
+		Env._setResult(actionResult);
 	}
 
     protected final void movedPermanently(final String newLocation) {
