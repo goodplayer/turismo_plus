@@ -17,6 +17,7 @@ package net.moetang.turismo_plus.pipeline.processing;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.ForkJoinPool;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,9 @@ import net.moetang.turismo_plus.pipeline.actionresult.DispatcherResult;
 import net.moetang.turismo_plus.pipeline.actionresult.TemplateResult;
 import net.moetang.turismo_plus.util.Env;
 import net.moetang.turismo_plus.util.FilterChain;
+import net.moetang.turismo_plus.util.ParallelWorkUtils.Task;
+import net.moetang.turismo_plus.util.ParallelWorkUtils.TaskImpl;
+import net.moetang.turismo_plus.util.ParallelWorkUtils.TaskResult;
 
 
 public abstract class Action implements IAction {
@@ -65,8 +69,45 @@ public abstract class Action implements IAction {
 	@Override
 	public void doAction(Env env) {
 		this.createFilterChain(filters).doNext(env);
+		if(pool != null){
+			try {
+				pool.shutdown();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
+	private ForkJoinPool pool;
+	private int parallelism = 1;
+	protected final void taskSetParallelism(int i){
+		if(i >0)
+			this.parallelism = i;
+	}
+	protected final <V> TaskResult<V>  taskAdd(Task<V> task) {
+		try {
+			if(pool != null){
+				if(!pool.isShutdown()){
+					return taskSubmit(task);
+				}
+			}else{
+				pool = new ForkJoinPool(parallelism);
+				return taskSubmit(task);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	private final <V> TaskResult<V> taskSubmit(Task<V> task){
+		try {
+			return new TaskResult<V>(pool.submit(new TaskImpl<>(task)));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
     protected final String params(String key) {
         return Env._getParam(key);
     }
