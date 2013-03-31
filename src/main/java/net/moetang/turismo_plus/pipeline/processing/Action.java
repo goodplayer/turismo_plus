@@ -100,40 +100,40 @@ public abstract class Action implements IAction {
         return Env._ctx();
     }
 
-    protected final void alias(String target) {
+    protected void alias(String target) {
         forward(target);
     }
 
-    protected final void forward(String target) {
+    protected void forward(String target) {
     	Env._setResult(new DispatcherResult(target));
     }
 
-    protected final void jsp(String path) {
+    protected void jsp(String path) {
         forward(path);
     }
 
-    protected final void result(ActionResult actionResult){
+    protected void result(ActionResult actionResult){
     	Env._setResult(actionResult);
     }
     
-    protected final void flushPageletHead(PageletHead head) {
+    protected void flushPageletHead(PageletHead head) {
 		head.doFlushHead(Env.get());
 	}
     
-    protected final void flushPagelet(Pagelet pagelet) {
+    protected void flushPagelet(Pagelet pagelet) {
 		pagelet.flushPagelet(Env.get());
 	}
 
-    protected final void render(TemplateResult actionResult, String param) {
+    protected void render(TemplateResult actionResult, String param) {
     	actionResult.initParam(param);
 		Env._setResult(actionResult);
 	}
-    protected final void render(TemplateResult actionResult, Map<String, String> params) {
+    protected void render(TemplateResult actionResult, Map<String, String> params) {
     	actionResult.initParam(params);
 		Env._setResult(actionResult);
 	}
 
-    protected final void movedPermanently(final String newLocation) {
+    protected void movedPermanently(final String newLocation) {
         Env._setResult(new ActionResult() {
 			@Override
 			public void doResult() {
@@ -143,7 +143,7 @@ public abstract class Action implements IAction {
         });
     }
 
-    protected final void movedTemporarily(final String newLocation) {
+    protected void movedTemporarily(final String newLocation) {
     	Env._setResult(new ActionResult() {
 			@Override
 			public void doResult() {
@@ -153,7 +153,7 @@ public abstract class Action implements IAction {
         });
     }
 
-    protected final void notFound() {
+    protected void notFound() {
     	Env._setResult(new ActionResult() {
 			@Override
 			public void doResult() {
@@ -166,7 +166,7 @@ public abstract class Action implements IAction {
         });
     }
 
-    protected final void redirect(final String newLocation) {
+    protected void redirect(final String newLocation) {
     	Env._setResult(new ActionResult() {
 			@Override
 			public void doResult() {
@@ -179,7 +179,7 @@ public abstract class Action implements IAction {
         });
     }
 
-    protected final void print(String string) {
+    protected void print(String string) {
         try {
 			Env._res().getWriter().write(string);
 		} catch (IOException e) {
